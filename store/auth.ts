@@ -2,6 +2,20 @@
 'use client';
 import { create } from 'zustand';
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
+function clearAuth() {
+  localStorage.removeItem('admin_token');
+  localStorage.removeItem('admin_role');
+}
+
 interface AuthState {
   token: string | null;
   role: string | null;
@@ -19,7 +33,12 @@ export const useAuthStore = create<AuthState>((set) => ({
   init: () => {
     const token = localStorage.getItem('admin_token');
     const role = localStorage.getItem('admin_role');
-    if (token) set({ token, role, isAuthenticated: true });
+    if (token && !isTokenExpired(token)) {
+      set({ token, role, isAuthenticated: true });
+    } else if (token) {
+      clearAuth();
+      set({ token: null, role: null, isAuthenticated: false });
+    }
   },
 
   login: async (username, password) => {
@@ -36,8 +55,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_role');
+    clearAuth();
     set({ token: null, role: null, isAuthenticated: false });
   },
 }));

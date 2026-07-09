@@ -1,6 +1,6 @@
 'use client';
 
-const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+const STATUSES = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'];
 const CHANNELS = ['web', 'facebook', 'shopee', 'lazada', 'tiktok', 'manual'];
 
 interface OrderFiltersProps {

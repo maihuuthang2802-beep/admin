@@ -14,7 +14,7 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    apiFetch<Product[]>('/products').then(setProducts).catch(() => {}).finally(() => setLoading(false));
+    apiFetch<Product[]>('/admin/products').then(setProducts).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -24,7 +24,15 @@ export default function ProductsPage() {
         <main className="flex-1 overflow-auto p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-xl font-semibold">Sản phẩm</h1>
-            <span className="text-sm text-neutral-500">{products.length} sản phẩm</span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-neutral-500">{products.length} sản phẩm</span>
+              <Link
+                href="/products/create"
+                className="bg-neutral-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors"
+              >
+                + Thêm sản phẩm
+              </Link>
+            </div>
           </div>
 
           <div className="bg-white dark:bg-neutral-900 rounded-xl border overflow-hidden">
